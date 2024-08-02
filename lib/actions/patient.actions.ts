@@ -1,5 +1,9 @@
+
+
 import { ID, Query } from "node-appwrite"
 import { users } from "../appwrite.config"
+import { parseStringify } from "../utils"
+import { InputFile } from "node-appwrite/file"
 
 export const createUser = async (user: CreateUserParams) => {
     try {
@@ -9,14 +13,31 @@ export const createUser = async (user: CreateUserParams) => {
             user.phone, 
             undefined, 
             user.name
-        )
+        );
+        
+
+        return parseStringify(newUser);
     } catch (error: any) {
         if(error && error?.code === 409) {
             const documents = await users.list([
-                Query.equal('email', [user.email])
+                Query.equal("email", [user.email])
             ])
 
             return documents?.users[0]
         }
+        console.error("An error has occured while creating a new User", error);
+        
+    }
+}
+
+export const getUser = async (userId: string) => {
+    try {
+        const user = await users.get(userId);
+
+        return parseStringify(user);
+    } catch (error) {
+        console.log(error);
+        
+        
     }
 }
