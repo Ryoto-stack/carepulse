@@ -11,6 +11,7 @@ import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "@/lib/actions/patient.actions";
+import fs from 'fs';
 
 export enum FormFieldType {
   INPUT = "input",
