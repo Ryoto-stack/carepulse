@@ -26,7 +26,7 @@ import { FormFieldType } from "./PatientForm";
 export const AppointmentForm = ({
   userId,
   patientId,
-  type = "create",
+  type,
   appointment,
   setOpen,
 }: {
@@ -34,7 +34,7 @@ export const AppointmentForm = ({
   patientId: string;
   type: "create" | "schedule" | "cancel";
   appointment?: Appointment;
-  setOpen?: Dispatch<SetStateAction<boolean>>;
+  setOpen?: (open: boolean) => void;
 }) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -44,19 +44,16 @@ export const AppointmentForm = ({
   const form = useForm<z.infer<typeof AppointmentFormValidation>>({
     resolver: zodResolver(AppointmentFormValidation),
     defaultValues: {
-      primaryPhysician: appointment ? appointment?.primaryPhysician : "",
-      schedule: appointment
-        ? new Date(appointment?.schedule!)
-        : new Date(Date.now()),
-      reason: appointment ? appointment.reason : "",
-      note: appointment?.note || "",
-      cancellationReason: appointment?.cancellationReason || "",
+      primaryPhysician: appointment ? appointment.primaryPhysician : "",
+      schedule: appointment ? new Date(appointment?.schedule) : new Date(Date.now()),
+      reason: appointment ? appointment.reason : '',
+      note: appointment?.note || '',
+      cancellationReason: appointment?.cancellationReason || '',
     },
   });
-
-  const onSubmit = async (
-    values: z.infer<typeof AppointmentFormValidation>
-  ) => {
+  
+  async function onSubmit(values: z.infer<typeof AppointmentFormValidation>) {
+    
     setIsLoading(true);
 
     let status;
@@ -122,11 +119,14 @@ export const AppointmentForm = ({
     case "cancel":
       buttonLabel = "Cancel Appointment";
       break;
+    case "create":
+      buttonLabel = "Create Appointment";
+      break;
     case "schedule":
       buttonLabel = "Schedule Appointment";
       break;
     default:
-      buttonLabel = "Submit Apppointment";
+      break;
   }
 
   return (

@@ -5,10 +5,8 @@ import { StatusBadge } from "../StatusBadge";
 import { formatDateTime } from "@/lib/utils";
 import { Doctors } from "@/constants";
 import Image from "next/image";
-import {AppointmentModal} from "../AppointmentModal";
+import { AppointmentModal } from "../AppointmentModal";
 import { Appointment } from "@/types/appwrite.types";
-
-
 
 export const columns: ColumnDef<Appointment>[] = [
   {
@@ -22,7 +20,7 @@ export const columns: ColumnDef<Appointment>[] = [
     header: "Patient",
     cell: ({ row }) => {
       const appointment = row.original;
-      return <p className="text-14-medium ">{appointment.patient.name}</p>;
+      return <p className="text-14-medium ">{appointment.patient?.name}</p>;
     },
   },
   {
@@ -76,26 +74,20 @@ export const columns: ColumnDef<Appointment>[] = [
   {
     id: "actions",
     header: () => <div className="pl-4">Actions</div>,
-    cell: ({ row }) => {
-      const appointment = row.original;
-
+    cell: ({ row: { original: data } }) => {
       return (
         <div className="flex gap-1">
           <AppointmentModal
-            patientId={appointment.patient.$id}
-            userId={appointment.userId}
-            appointment={appointment}
             type="schedule"
-            title="Schedule Appointment"
-            description="Please confirm the following details to schedule."
+            patientId={data.patient?.$id}
+            userId={data.userId}
+            appointment={data}
           />
           <AppointmentModal
-            patientId={appointment.patient.$id}
-            userId={appointment.userId}
-            appointment={appointment}
             type="cancel"
-            title="Cancel Appointment"
-            description="Are you sure you want to cancel your appointment?"
+            patientId={data.patient?.$id}
+            userId={data.userId}
+            appointment={data}
           />
         </div>
       );

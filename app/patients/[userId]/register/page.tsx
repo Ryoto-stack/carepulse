@@ -3,10 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import RegisterForm from "@/components/forms/RegisterForm";
 import { getUser } from "@/lib/actions/patient.actions";
+import * as Sentry from '@sentry/nextjs'
 
 const Register = async ({ params: { userId } }: SearchParamProps) => {
   const user = await getUser(userId);
-
   return (
     <div className="flex h-screen max-h-screen">
       <section className="remove-scrollbar container">

@@ -11,7 +11,6 @@ import { UserFormValidation } from "@/lib/validation";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createUser } from "@/lib/actions/patient.actions";
-import fs from 'fs';
 
 export enum FormFieldType {
   INPUT = "input",
@@ -46,9 +45,9 @@ const PatientForm = () => {
     try {
       const userData = { name, email, phone };
       const user = await createUser(userData);
-      if (user) 
-        router.push(`/patients/${user.$id}/register`)
-      
+      if (user) {
+        router.push(`/patients/${user.$id}/register`);
+      }
     } catch (error) {
       console.log(error);
     }
